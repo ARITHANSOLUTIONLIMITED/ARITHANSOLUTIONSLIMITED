@@ -429,7 +429,78 @@
     .clients { margin-top:75px; border-top:1px solid rgba(255,255,255,.13); padding-top:30px; }
     .clients-title { font-size:11px; color:#a9c0d8; text-transform:uppercase; letter-spacing:1.5px; }
     .client-list { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
-    .client { padding:10px 14px; border:1px solid rgba(255,255,255,.13); border-radius:30px; color:#e4eff9; font-size:11px; }
+    .client {
+      appearance:none; padding:11px 15px; border:1px solid rgba(119,193,255,.25);
+      border-radius:30px; color:#e4eff9; font:inherit; font-size:11px;
+      background:rgba(255,255,255,.035); cursor:pointer; transition:.25s;
+    }
+    .client:hover, .client:focus-visible {
+      transform:translateY(-2px); border-color:rgba(119,193,255,.7);
+      background:rgba(18,101,189,.25); color:#fff; outline:none;
+      box-shadow:0 8px 24px rgba(0,0,0,.16);
+    }
+
+    /* SELECTED CLIENT OFFERINGS MODAL */
+    .client-modal {
+      position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center;
+      padding:22px; background:rgba(2,18,42,.78); backdrop-filter:blur(10px);
+    }
+    .client-modal.open { display:flex; animation:clientFade .22s ease; }
+    @keyframes clientFade { from { opacity:0; } to { opacity:1; } }
+    .client-dialog {
+      position:relative; width:min(820px,96vw); max-height:90vh; overflow:auto;
+      border-radius:26px; padding:1px;
+      background:linear-gradient(135deg, rgba(119,193,255,.9), rgba(255,183,77,.55), rgba(18,101,189,.85));
+      box-shadow:0 30px 90px rgba(0,0,0,.45);
+    }
+    .client-dialog-inner {
+      position:relative; overflow:hidden; border-radius:25px;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(119,193,255,.20), transparent 30%),
+        radial-gradient(circle at 0% 100%, rgba(255,183,77,.10), transparent 28%),
+        linear-gradient(145deg, #031f4b 0%, #062e68 48%, #031a3c 100%);
+      padding:34px; color:#fff;
+    }
+    .client-dialog-inner::before {
+      content:""; position:absolute; inset:0; pointer-events:none; opacity:.16;
+      background-image:linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+                       linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size:32px 32px; mask-image:linear-gradient(to bottom right, black, transparent 75%);
+    }
+    .client-modal-close {
+      position:absolute; right:18px; top:18px; z-index:3; width:40px; height:40px;
+      border:1px solid rgba(255,255,255,.18); border-radius:50%; background:rgba(255,255,255,.09);
+      color:#fff; font-size:23px; cursor:pointer; display:grid; place-items:center;
+      transition:.2s;
+    }
+    .client-modal-close:hover { background:rgba(119,193,255,.25); transform:rotate(90deg); }
+    .client-modal-head { position:relative; z-index:1; padding-right:48px; margin-bottom:24px; }
+    .client-modal-kicker {
+      display:inline-flex; align-items:center; gap:8px; color:#77c1ff; font-size:10px;
+      text-transform:uppercase; letter-spacing:1.7px; font-weight:700; margin-bottom:9px;
+    }
+    .client-modal-kicker::before { content:""; width:24px; height:2px; background:#ffbd59; border-radius:2px; }
+    .client-modal-title { font-family:Poppins,sans-serif; font-size:clamp(23px,4vw,34px); margin:0 0 7px; color:#fff; }
+    .client-modal-industry { margin:0; color:#bfd8ee; font-size:13px; }
+    .client-offerings {
+      position:relative; z-index:1; display:grid; grid-template-columns:repeat(2,1fr); gap:11px; margin-top:22px;
+    }
+    .client-offer {
+      display:flex; align-items:center; gap:10px; min-height:48px; padding:12px 14px;
+      border:1px solid rgba(255,255,255,.10); border-radius:13px;
+      background:rgba(255,255,255,.055); color:#edf6ff; font-size:12px;
+      transition:.2s;
+    }
+    .client-offer::before {
+      content:"✓"; width:23px; height:23px; flex:none; border-radius:50%;
+      display:grid; place-items:center; color:#062e68; background:#77c1ff; font-weight:800; font-size:11px;
+    }
+    .client-offer:hover { border-color:rgba(119,193,255,.35); background:rgba(119,193,255,.09); transform:translateX(2px); }
+    @media(max-width:700px){
+      .client-dialog-inner{padding:28px 20px 22px;}
+      .client-offerings{grid-template-columns:1fr;}
+      .client-modal{padding:12px;}
+    }
     footer { margin-top:45px; padding-top:25px; border-top:1px solid rgba(255,255,255,.12); color:#9eb4cc; font-size:10px; display:flex; justify-content:space-between; gap:20px; }
 
     /* REVEAL */
@@ -710,11 +781,11 @@
         <div class="clients reveal">
           <div class="clients-title">Selected clients listed in the company profile</div>
           <div class="client-list">
-            <span class="client">DW Engineering & Construction Limited</span>
-            <span class="client">Coca-Cola Bottling Company</span>
-            <span class="client">Powertek Engineering</span>
-            <span class="client">TAZAMA Pipelines</span>
-            <span class="client">Mulonga Water & Sewerage Company</span>
+            <button class="client" type="button" data-client="dw">DW Engineering & Construction Limited</button>
+            <button class="client" type="button" data-client="coca">Coca-Cola Bottling Company</button>
+            <button class="client" type="button" data-client="powertek">Powertek Engineering</button>
+            <button class="client" type="button" data-client="tazama">TAZAMA Pipelines</button>
+            <button class="client" type="button" data-client="mulonga">Mulonga Water & Sewerage Company</button>
           </div>
         </div>
 
@@ -726,6 +797,22 @@
     </section>
   </main>
 
+
+
+  <!-- SELECTED CLIENT OFFERINGS MODAL -->
+  <div class="client-modal" id="clientModal" aria-hidden="true">
+    <div class="client-dialog" role="dialog" aria-modal="true" aria-labelledby="clientModalTitle">
+      <div class="client-dialog-inner">
+        <button class="client-modal-close" type="button" aria-label="Close client offerings">×</button>
+        <div class="client-modal-head">
+          <div class="client-modal-kicker">Arithan Solutions · Selected Client</div>
+          <h3 class="client-modal-title" id="clientModalTitle"></h3>
+          <p class="client-modal-industry" id="clientModalIndustry"></p>
+        </div>
+        <div class="client-offerings" id="clientOfferings"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- PRODUCT COMPONENT IMAGE VIEWER -->
   <div class="component-modal" id="componentModal" aria-hidden="true">
@@ -771,6 +858,119 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
+
+
+    // Selected client offerings popup
+    const clientModal = document.getElementById('clientModal');
+    const clientModalTitle = document.getElementById('clientModalTitle');
+    const clientModalIndustry = document.getElementById('clientModalIndustry');
+    const clientOfferings = document.getElementById('clientOfferings');
+    const clientModalClose = clientModal.querySelector('.client-modal-close');
+
+    const clientData = {
+      dw: {
+        title:'DW Engineering & Construction Limited',
+        industry:'Engineering & Construction',
+        offerings:[
+          'Mechanical components and equipment',
+          'Electrical systems and components',
+          'Instrumentation',
+          'Automation solutions',
+          'Installation & commissioning',
+          'Troubleshooting and technical support',
+          'Calibration & verification'
+        ]
+      },
+      coca: {
+        title:'Coca-Cola Bottling Company',
+        industry:'Manufacturing & Beverage Production',
+        offerings:[
+          'Pumps, valves and motors',
+          'Conveyor systems',
+          'Filtration systems',
+          'Electrical components and automation',
+          'Process instrumentation',
+          'Flow, temperature and pressure measurement',
+          'Installation & commissioning',
+          'Calibration & verification',
+          'Troubleshooting and technical support'
+        ]
+      },
+      powertek: {
+        title:'Powertek Engineering',
+        industry:'Electrical & Engineering Services',
+        offerings:[
+          'Electrical systems and components',
+          'Overhead line hardware',
+          'Insulators',
+          'VSDs / VFDs',
+          'Automation solutions',
+          'Instrumentation',
+          'Mechanical components',
+          'Installation & commissioning',
+          'Troubleshooting',
+          'Calibration & verification'
+        ]
+      },
+      tazama: {
+        title:'TAZAMA Pipelines',
+        industry:'Oil & Pipeline Infrastructure',
+        offerings:[
+          'Pumps and valves',
+          'Actuators and seals',
+          'Hydraulic systems',
+          'Electrical components',
+          'Process instrumentation',
+          'Flow, pressure and temperature measurement',
+          'Installation & commissioning',
+          'Calibration & verification',
+          'Troubleshooting and technical support'
+        ]
+      },
+      mulonga: {
+        title:'Mulonga Water & Sewerage Company',
+        industry:'Water & Utilities',
+        offerings:[
+          'Pumps and valves',
+          'Filtration systems',
+          'Hydraulic systems',
+          'Electrical systems and components',
+          'Process instrumentation',
+          'Flow, level and pressure measurement',
+          'Installation & commissioning',
+          'Calibration & verification',
+          'Troubleshooting and technical support'
+        ]
+      }
+    };
+
+    function openClientModal(key){
+      const data = clientData[key];
+      if(!data) return;
+      clientModalTitle.textContent = data.title;
+      clientModalIndustry.textContent = data.industry;
+      clientOfferings.innerHTML = data.offerings.map(item => `<div class="client-offer">${item}</div>`).join('');
+      clientModal.classList.add('open');
+      clientModal.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+
+    function closeClientModal(){
+      clientModal.classList.remove('open');
+      clientModal.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+
+    document.querySelectorAll('.client[data-client]').forEach(client => {
+      client.addEventListener('click', () => openClientModal(client.dataset.client));
+      client.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openClientModal(client.dataset.client); }
+      });
+    });
+
+    clientModalClose.addEventListener('click', closeClientModal);
+    clientModal.addEventListener('click', e => { if(e.target === clientModal) closeClientModal(); });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape' && clientModal.classList.contains('open')) closeClientModal(); });
 
     // Product component image viewer
     const componentModal = document.getElementById('componentModal');
